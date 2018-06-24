@@ -18,8 +18,11 @@ HEADERS = $(wildcard $(SRC)*.h)
 
 .PRECIOUS: $(TARGET) $(OBJECTS)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) | $(OUTPUT)
 	$(CC) $(OBJECTS) $(CFLAGS) $(LIBS) -o $(OUTPUT)$@
+
+$(OUTPUT):
+	@mkdir -p $(OUTPUT)
 
 clean:
 	@echo "Cleaning up"
