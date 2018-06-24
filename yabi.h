@@ -51,28 +51,38 @@ struct yabi_node_list {
 };
 
 /* list creation/deletion */
-struct yabi_node_list *create_list(void);
-void destroy_list(struct yabi_node_list *list);
+struct yabi_node_list *yabi_create_node_list(void);
+void yabi_destroy_node_list(struct yabi_node_list *list);
 
 /* node list functions */
 struct yabi_node *yabi_node_list_peek(struct yabi_node_list *list);
 struct yabi_node *yabi_node_list_pop(struct yabi_node_list *list);
 enum yabi_err yabi_node_list_push(struct yabi_node_list *list);
 struct yabi_node_list *yabi_json_to_node_list(char *buffer);
-struct yabi_node_list *yabi_becode_to_node_list(char *buffer);
+struct yabi_node_list *yabi_bencode_to_node_list(char *buffer);
 char *yabi_node_list_to_json(struct yabi_node_list *list);
 char *yabi_json_to_bencode(char *buffer);
 
+/* node creation/deletion */
+struct yabi_node yabi_create_node(void);
+void yabi_destroy_node(struct yabi_node *node);
+
+/* element creating/deletion */
+struct yabi_type *yabi_create_string(void);
+void yabi_destroy_string(struct yabi_string *element);
+struct yabi_type *yabi_create_dictionary_element(void);
+void yabi_destroy_dictionary_element(struct yabi_dictionary_element *element);
+
 /* read in elements */
-yabi_string *read_yabi_string(char *buffer);
-size_t read_yabi_integer(char *buffer);
-struct yabi_type **read_yabi_list(char *buffer);
-struct yabi_dictionary_element *read_yabi_dictionary_element(char *buffer);
+struct yabi_type *yabi_read_string(char *buffer);
+struct yabi_type *yabi_read_integer(char *buffer);
+struct yabi_type *yabi_read_list(char *buffer);
+struct yabi_type *yabi_read_dictionary_element(char *buffer);
 
 /* output elements */
-char *output_yabi_string(yabi_string *element);
-char *output_yabi_integer(size_t element);
-char *output_yabi_list(struct yabi_type **element);
-char *output_yabi_dictionary_element(struct yabi_dictionary_element *element);
+char *yabi_output_string(struct yabi_type *element);
+char *yabi_output_integer(struct yabi_type *element);
+char *yabi_output_list(struct yabi_type *element);
+char *yabi_output_dictionary_element(struct yabi_type *element);
 
 #endif /* YABI_H */
