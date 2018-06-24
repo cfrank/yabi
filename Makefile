@@ -1,4 +1,4 @@
-TARGET = yabi
+TARGET = yabi.out
 LIBS =
 CC = gcc
 CFLAGS = -g -O2 -Wall -Werror -fno-inline -Wold-style-definition -Wdeclaration-after-statement
