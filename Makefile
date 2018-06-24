@@ -23,8 +23,8 @@ $(TARGET): $(OBJECTS) | $(OUTPUT)
 	$(CC) $(OBJECTS) $(CFLAGS) $(LIBS) -o $(OUTPUT)$@
 
 $(OUTPUT):
-	@echo "Creating bin/"
-	@mkdir -p $(OUTPUT)
+	@echo "Creating $(OUTPUT)"
+	@mkdir -p $@
 
 clean:
 	@echo "Cleaning up"
