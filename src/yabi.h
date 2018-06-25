@@ -48,6 +48,7 @@ struct yabi_node {
 struct yabi_node_list {
         size_t length;
         struct yabi_node *head;
+        struct yabi_node *tail;
 };
 
 /* list creation/deletion */
@@ -64,8 +65,8 @@ char *yabi_node_list_to_json(struct yabi_node_list *list);
 char *yabi_json_to_bencode(char *buffer);
 
 /* node creation/deletion */
-struct yabi_node yabi_create_node(void);
-void yabi_destroy_node(struct yabi_node *node);
+struct yabi_node *yabi_create_node(void);
+void yabi_destroy_node(struct yabi_node_list *list, struct yabi_node *node);
 
 /* element creating/deletion */
 struct yabi_type *yabi_create_string(void);
