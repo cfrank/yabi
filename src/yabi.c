@@ -43,6 +43,10 @@ static void empty_node_list(struct yabi_node_list *list)
                 current_node = next_node;
                 next_node = current_node->next;
         }
+
+        list->length = 0;
+        list->head = NULL;
+        list->tail = NULL;
 }
 
 struct yabi_node *yabi_create_node(void)
