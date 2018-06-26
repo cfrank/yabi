@@ -29,4 +29,4 @@ $(OUTPUT):
 clean:
 	@echo "Cleaning up"
 	-rm -f $(SRC)*.o
-	-rm -f $(OUTPUT)
+	-rm -rf $(OUTPUT)
