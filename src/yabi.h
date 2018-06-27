@@ -51,27 +51,33 @@ struct yabi_node_list {
         struct yabi_node *tail;
 };
 
+/* node creation */
+struct yabi_node *yabi_create_node(void);
+
 /* list creation/deletion */
 struct yabi_node_list *yabi_create_node_list(void);
 void yabi_destroy_node_list(struct yabi_node_list *list);
 
 /* node list functions */
+bool yabi_node_list_is_empty(struct yabi_node_list *list);
 struct yabi_node *yabi_node_list_peek(struct yabi_node_list *list);
 struct yabi_node *yabi_node_list_pop(struct yabi_node_list *list);
-enum yabi_err yabi_node_list_push(struct yabi_node_list *list);
+void yabi_node_list_push(struct yabi_node_list *list, struct yabi_node *node);
+void yabi_node_list_remove(struct yabi_node_list *list, struct yabi_node *node);
 struct yabi_node_list *yabi_json_to_node_list(char *buffer);
 struct yabi_node_list *yabi_bencode_to_node_list(char *buffer);
 char *yabi_node_list_to_json(struct yabi_node_list *list);
 char *yabi_json_to_bencode(char *buffer);
 
-/* node creation/deletion */
-struct yabi_node *yabi_create_node(void);
-void yabi_destroy_node(struct yabi_node_list *list, struct yabi_node *node);
-
 /* element creating/deletion */
-struct yabi_type *yabi_create_string(void);
-void yabi_destroy_string(struct yabi_string *element);
-struct yabi_type *yabi_create_dictionary_element(void);
+struct yabi_type *yabi_create_string(const char *string);
+void yabi_destroy_string(struct yabi_type *element);
+struct yabi_type *yabi_create_integer(size_t integer);
+void yabi_destroy_integer(struct yabi_type *element);
+struct yabi_type *yabi_create_list(struct yabi_type **list);
+void yabi_destroy_list(struct yabi_type *element);
+struct yabi_type *
+yabi_create_dictionary_element(struct yabi_dictionary_element *dictionary);
 void yabi_destroy_dictionary_element(struct yabi_dictionary_element *element);
 
 /* read in elements */

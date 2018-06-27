@@ -1,9 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "yabi.h"
 
 static void empty_node_list(struct yabi_node_list *list);
+static struct yabi_type *create_yabi_type(void);
+
+struct yabi_node *yabi_create_node(void)
+{
+        struct yabi_node *ret = malloc(sizeof(struct yabi_node));
+
+        if (ret == NULL) {
+                return NULL;
+        }
+
+        ret->element = NULL;
+        ret->prev = NULL;
+        ret->next = NULL;
+
+        return ret;
+}
 
 struct yabi_node_list *yabi_create_node_list(void)
 {
@@ -49,42 +66,118 @@ static void empty_node_list(struct yabi_node_list *list)
         list->tail = NULL;
 }
 
-struct yabi_node *yabi_create_node(void)
+bool yabi_node_list_is_empty(struct yabi_node_list *list)
 {
-        struct yabi_node *ret = malloc(sizeof(struct yabi_node));
+        return list->length == 0;
+}
 
-        if (ret == NULL) {
+struct yabi_node *yabi_node_list_peek(struct yabi_node_list *list)
+{
+        return list->head;
+}
+
+struct yabi_node *yabi_node_list_pop(struct yabi_node_list *list)
+{
+        if (yabi_node_list_is_empty(list)) {
                 return NULL;
         }
 
-        ret->element = NULL;
-        ret->prev = NULL;
-        ret->next = NULL;
+        struct yabi_node *ret = list->head;
+
+        list->head = list->head->prev;
+        --list->length;
 
         return ret;
 }
 
-void yabi_destroy_node(struct yabi_node_list *list, struct yabi_node *node)
+void yabi_node_list_push(struct yabi_node_list *list, struct yabi_node *node)
+{
+        list->head->next = node;
+        node->prev = list->head;
+        list->head = node;
+        ++list->length;
+}
+
+void yabi_node_list_remove(struct yabi_node_list *list, struct yabi_node *node)
 {
         /* don't leave a gap in the list */
         if (node->prev != NULL) {
                 node->prev->next = node->next;
-        } else {
-                list->head = node->next;
-        }
-
-        if (node->next != NULL) {
                 node->next->prev = node->prev;
         } else {
+                list->head = node->next;
                 list->tail = node->prev;
         }
 
         free(node);
 }
 
-struct yabi_node *yabi_node_list_peek(struct yabi_node_list *list)
+static struct yabi_type *create_yabi_type(void)
 {
-        return list->head;
+        struct yabi_type *ret = malloc(sizeof(struct yabi_type));
+
+        if (ret == NULL) {
+                return NULL;
+        }
+
+        return ret;
+}
+
+struct yabi_type *yabi_create_string(const char *string)
+{
+        struct yabi_type *ret = create_yabi_type();
+
+        if (ret == NULL) {
+                return NULL;
+        }
+
+        ret->type = YABI_STRING;
+        ret->string = string;
+
+        return ret;
+}
+
+struct yabi_type *yabi_create_integer(size_t integer)
+{
+        struct yabi_type *ret = create_yabi_type();
+
+        if (ret == NULL) {
+                return NULL;
+        }
+
+        ret->type = YABI_INTEGER;
+        ret->integer = integer;
+
+        return ret;
+}
+
+struct yabi_type *yabi_create_list(struct yabi_type **list)
+{
+        struct yabi_type *ret = create_yabi_type();
+
+        if (ret == NULL) {
+                return NULL;
+        }
+
+        ret->type = YABI_LIST;
+        ret->list = list;
+
+        return ret;
+}
+
+struct yabi_type *yabi_create_dictionary_element(
+        struct yabi_dictionary_element *dictionary_element)
+{
+        struct yabi_type *ret = create_yabi_type();
+
+        if (ret == NULL) {
+                return NULL;
+        }
+
+        ret->type = YABI_DICTIONARY;
+        ret->list = dictionary_element;
+
+        return ret;
 }
 
 int main(void)
