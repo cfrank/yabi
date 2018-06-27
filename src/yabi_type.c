@@ -3,8 +3,6 @@
 
 #include "yabi_type.h"
 
-static struct yabi_type *create_yabi_type(void);
-
 static struct yabi_type *create_yabi_type(void)
 {
         struct yabi_type *ret = malloc(sizeof(struct yabi_type));
