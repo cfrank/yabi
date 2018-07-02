@@ -63,8 +63,6 @@ static void empty_node_list(struct yabi_node_list *list)
 
                 yabi_destroy_element(tmp->element);
                 free(tmp);
-
-                puts("Run 1 time");
         }
 
         list->length = 0;
