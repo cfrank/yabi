@@ -4,6 +4,7 @@
 #include "yabi_node.h"
 
 static void empty_node_list(struct yabi_node_list *list);
+static void remove_node(struct yabi_node_list *list, struct yabi_node *element);
 
 struct yabi_node *yabi_create_node(struct yabi_type *element)
 {
@@ -18,6 +19,30 @@ struct yabi_node *yabi_create_node(struct yabi_type *element)
         ret->next = NULL;
 
         return ret;
+}
+
+void yabi_destroy_node(struct yabi_node *node)
+{
+        yabi_destroy_element(node->element);
+
+        free(node);
+}
+
+static void remove_node(struct yabi_node_list *list, struct yabi_node *node)
+{
+        if (node->prev != NULL) {
+                node->prev->next = node->next;
+        } else {
+                list->head = node->next;
+        }
+
+        if (node->next != NULL) {
+                node->next->prev = node->prev;
+        } else {
+                list->tail = node->prev;
+        }
+
+        --list->length;
 }
 
 struct yabi_node_list *yabi_create_node_list(void)
@@ -61,8 +86,7 @@ static void empty_node_list(struct yabi_node_list *list)
                 tmp = head;
                 head = head->prev;
 
-                yabi_destroy_element(tmp->element);
-                free(tmp);
+                yabi_destroy_node(tmp);
         }
 
         list->length = 0;
@@ -80,14 +104,17 @@ struct yabi_node *yabi_node_list_peek(struct yabi_node_list *list)
         return list->head;
 }
 
-struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list)
+struct yabi_node *yabi_node_list_pop(struct yabi_node_list *list)
 {
         if (yabi_node_list_is_empty(list)) {
                 return NULL;
         }
 
-        /* TODO: Fix this */
-        return NULL;
+        struct yabi_node *ret = list->head;
+
+        remove_node(list, list->head);
+
+        return ret;
 }
 
 void yabi_node_list_push(struct yabi_node_list *list, struct yabi_type *element)
@@ -96,25 +123,18 @@ void yabi_node_list_push(struct yabi_node_list *list, struct yabi_type *element)
 
         if (yabi_node_list_is_empty(list)) {
                 list->head = node;
+                list->tail = node;
                 ++list->length;
-        } else {
-                list->head->next = node;
-                node->prev = list->head;
-                list->head = node;
-                ++list->length;
+                return;
         }
+
+        // TODO: Fix this
 }
 
 void yabi_node_list_remove(struct yabi_node_list *list, struct yabi_node *node)
 {
         /* don't leave a gap in the list */
-        if (node->prev != NULL) {
-                node->prev->next = node->next;
-                node->next->prev = node->prev;
-        } else {
-                list->head = node->next;
-                list->tail = node->prev;
-        }
+        remove_node(list, node);
 
         free(node);
 }

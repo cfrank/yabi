@@ -21,6 +21,7 @@ struct yabi_node_list {
 
 /* node creation */
 struct yabi_node *yabi_create_node(struct yabi_type *element);
+void yabi_destroy_node(struct yabi_node *node);
 
 /* list creation/deletion */
 struct yabi_node_list *yabi_create_node_list(void);
@@ -29,7 +30,7 @@ void yabi_destroy_node_list(struct yabi_node_list *list);
 /* node list functions */
 bool yabi_node_list_is_empty(struct yabi_node_list *list);
 struct yabi_node *yabi_node_list_peek(struct yabi_node_list *list);
-struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list);
+struct yabi_node *yabi_node_list_pop(struct yabi_node_list *list);
 void yabi_node_list_push(struct yabi_node_list *list,
                          struct yabi_type *element);
 void yabi_node_list_remove(struct yabi_node_list *list, struct yabi_node *node);

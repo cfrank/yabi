@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -52,6 +53,7 @@ struct yabi_type *yabi_create_string(const char *string)
 
 struct yabi_string *yabi_get_string(struct yabi_type *element)
 {
+        assert(element->type == YABI_STRING);
         return element->string;
 }
 

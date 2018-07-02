@@ -12,13 +12,10 @@ int main(void)
         struct yabi_type *my_string = yabi_create_string("Hello world");
         struct yabi_type *my_int = yabi_create_integer(55);
 
-        printf("%s\n", yabi_get_string(my_string)->value);
         printf("%zu\n", yabi_get_integer(my_int));
 
         yabi_node_list_push(list, my_string);
         yabi_node_list_push(list, my_int);
-
-        printf("%zu\n", yabi_node_list_pop(list)->integer);
 
         yabi_destroy_node_list(list);
 
