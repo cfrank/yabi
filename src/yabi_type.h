@@ -44,8 +44,10 @@ struct yabi_type {
 /* element creating/deletion */
 void yabi_destroy_element(struct yabi_type *element);
 struct yabi_type *yabi_create_string(const char *string);
+struct yabi_string *yabi_get_string(struct yabi_type *element);
 void yabi_destroy_string(struct yabi_type *element);
 struct yabi_type *yabi_create_integer(size_t integer);
+size_t yabi_get_integer(struct yabi_type *element);
 void yabi_destroy_integer(struct yabi_type *element);
 struct yabi_type *yabi_create_list(struct yabi_type **list, size_t length);
 void yabi_destroy_list(struct yabi_type *element);

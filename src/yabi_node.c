@@ -1,10 +1,11 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "yabi_node.h"
 
 static void empty_node_list(struct yabi_node_list *list);
 
-struct yabi_node *yabi_create_node(void)
+struct yabi_node *yabi_create_node(struct yabi_type *element)
 {
         struct yabi_node *ret = malloc(sizeof(struct yabi_node));
 
@@ -12,7 +13,7 @@ struct yabi_node *yabi_create_node(void)
                 return NULL;
         }
 
-        ret->element = NULL;
+        ret->element = element;
         ret->prev = NULL;
         ret->next = NULL;
 
@@ -29,6 +30,7 @@ struct yabi_node_list *yabi_create_node_list(void)
 
         ret->length = 0;
         ret->head = NULL;
+        ret->tail = NULL;
 
         return ret;
 }
@@ -43,19 +45,26 @@ void yabi_destroy_node_list(struct yabi_node_list *list)
 
 static void empty_node_list(struct yabi_node_list *list)
 {
-        struct yabi_node *current_node = list->head;
-        struct yabi_node *next_node = current_node->next;
+        if (yabi_node_list_is_empty(list)) {
+                return;
+        }
 
-        while (current_node != NULL) {
+        struct yabi_node *head = list->head;
+        struct yabi_node *tmp;
+
+        while (head != NULL) {
                 /*
                  * Since we are clearing the entire node list there is no point
                  * in using yabi_destroy_node as keeping the tree together is
                  * not needed
                  */
-                free(current_node);
+                tmp = head;
+                head = head->prev;
 
-                current_node = next_node;
-                next_node = current_node->next;
+                yabi_destroy_element(tmp->element);
+                free(tmp);
+
+                puts("Run 1 time");
         }
 
         list->length = 0;
@@ -73,26 +82,29 @@ struct yabi_node *yabi_node_list_peek(struct yabi_node_list *list)
         return list->head;
 }
 
-struct yabi_node *yabi_node_list_pop(struct yabi_node_list *list)
+struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list)
 {
-        struct yabi_node *ret = list->head;
-
         if (yabi_node_list_is_empty(list)) {
                 return NULL;
         }
 
-        list->head = list->head->prev;
-        --list->length;
-
-        return ret;
+        /* TODO: Fix this */
+        return NULL;
 }
 
-void yabi_node_list_push(struct yabi_node_list *list, struct yabi_node *node)
+void yabi_node_list_push(struct yabi_node_list *list, struct yabi_type *element)
 {
-        list->head->next = node;
-        node->prev = list->head;
-        list->head = node;
-        ++list->length;
+        struct yabi_node *node = yabi_create_node(element);
+
+        if (yabi_node_list_is_empty(list)) {
+                list->head = node;
+                ++list->length;
+        } else {
+                list->head->next = node;
+                node->prev = list->head;
+                list->head = node;
+                ++list->length;
+        }
 }
 
 void yabi_node_list_remove(struct yabi_node_list *list, struct yabi_node *node)

@@ -50,6 +50,11 @@ struct yabi_type *yabi_create_string(const char *string)
         return ret;
 }
 
+struct yabi_string *yabi_get_string(struct yabi_type *element)
+{
+        return element->string;
+}
+
 void yabi_destroy_string(struct yabi_type *element)
 {
         free(element->string);
@@ -68,6 +73,11 @@ struct yabi_type *yabi_create_integer(size_t integer)
         ret->integer = integer;
 
         return ret;
+}
+
+size_t yabi_get_integer(struct yabi_type *element)
+{
+        return element->integer;
 }
 
 void yabi_destroy_integer(struct yabi_type *element)

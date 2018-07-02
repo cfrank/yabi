@@ -1,8 +1,7 @@
 TARGET = yabi.out
 LIBS =
 CC = gcc
-CFLAGS = -g -O2 -std=c99 -Wall -Werror -fno-inline -Wold-style-definition \
--Wdeclaration-after-statement
+CFLAGS = -std=c99 -g -v -Q -O0 -Wall -Werror -fno-inline -Wold-style-definition
 SRC = src/
 OUTPUT = bin/
 
