@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "yabi.h"
+#include "yabi_list.h"
 #include "yabi_type.h"
 
 int main(void)
