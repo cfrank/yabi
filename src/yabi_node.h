@@ -28,6 +28,12 @@ void yabi_destroy_node(struct yabi_node *node);
 /* List helpers */
 bool yabi_node_list_is_empty(struct yabi_node_list *list);
 
+/* Getters */
+struct yabi_type *yabi_node_list_get_head(struct yabi_node_list *list);
+struct yabi_type *yabi_node_list_get_tail(struct yabi_node_list *list);
+struct yabi_type *yabi_node_list_get_index(struct yabi_node_list *list,
+                                           size_t index);
+
 /* Insertion/removal */
 void yabi_node_list_append(struct yabi_node_list *list, struct yabi_node *node);
 bool yabi_node_list_append_after(struct yabi_node_list *list,

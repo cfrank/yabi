@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "yabi_list.h"
+#include "yabi_node.h"
 #include "yabi_type.h"
 
 static void empty_node_list(struct yabi_node_list *list);
@@ -71,14 +71,40 @@ bool yabi_node_list_is_empty(struct yabi_node_list *list)
         return list->length == 0;
 }
 
+struct yabi_type *yabi_node_list_get_head(struct yabi_node_list *list)
+{
+        return list->head->element;
+}
+
+struct yabi_type *yabi_node_list_get_tail(struct yabi_node_list *list)
+{
+        return list->tail->element;
+}
+
+struct yabi_type *yabi_node_list_get_index(struct yabi_node_list *list,
+                                           size_t index)
+{
+        if (index > list->length) {
+                return NULL;
+        }
+
+        struct yabi_node *current_node = list->head;
+
+        for (size_t i = 0; i < index; ++i) {
+                current_node = current_node->next;
+        }
+
+        return current_node->element;
+}
+
 void yabi_node_list_append(struct yabi_node_list *list, struct yabi_node *node)
 {
         if (yabi_node_list_is_empty(list)) {
                 list->head = node;
                 list->tail = node;
         } else {
-                list->head->next = node;
-                list->head = node;
+                list->tail->next = node;
+                list->tail = node;
         }
 
         ++list->length;
@@ -90,7 +116,7 @@ bool yabi_node_list_append_after(struct yabi_node_list *list,
 {
         struct yabi_node *current_node = list->head;
 
-        while (list->head != NULL) {
+        while (current_node != NULL) {
                 /* Both pointers must point to the same address */
                 if (after == current_node) {
                         /* Insert here */
@@ -125,7 +151,7 @@ struct yabi_type *yabi_node_list_peek(struct yabi_node_list *list)
                 return NULL;
         }
 
-        return list->head->element;
+        return list->tail->element;
 }
 
 struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list)
