@@ -59,6 +59,28 @@ struct yabi_node *yabi_create_node(struct yabi_type *element)
         return ret;
 }
 
+struct yabi_node *yabi_create_string_node(const char *string)
+{
+        return yabi_create_node(yabi_create_string(string));
+}
+
+struct yabi_node *yabi_create_integer_node(size_t integer)
+{
+        return yabi_create_node(yabi_create_integer(integer));
+}
+
+struct yabi_node *yabi_create_list_node(struct yabi_type **list, size_t length)
+{
+        return yabi_create_node(yabi_create_list(list, length));
+}
+
+struct yabi_node *
+yabi_create_dictionary_node(struct yabi_dictionary_element **dictionary,
+                            size_t length)
+{
+        return yabi_create_node(yabi_create_dictionary(dictionary, length));
+}
+
 void yabi_destroy_node(struct yabi_node *node)
 {
         yabi_destroy_element(node->element);

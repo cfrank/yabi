@@ -53,6 +53,9 @@ struct yabi_type *yabi_create_list(struct yabi_type **list, size_t length);
 void yabi_destroy_list(struct yabi_type *element);
 struct yabi_dictionary_element *
 yabi_create_dictionary_element(const char *key, struct yabi_type *value);
+struct yabi_type *
+yabi_create_dictionary(struct yabi_dictionary_element **dictionary,
+                       size_t length);
 void yabi_destroy_dictionary_element(struct yabi_dictionary_element *element);
 void yabi_destroy_dictionary(struct yabi_type *element);
 

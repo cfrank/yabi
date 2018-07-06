@@ -23,6 +23,12 @@ void yabi_destroy_node_list(struct yabi_node_list *list);
 
 /* Node creation/deletion */
 struct yabi_node *yabi_create_node(struct yabi_type *element);
+struct yabi_node *yabi_create_string_node(const char *string);
+struct yabi_node *yabi_create_integer_node(size_t integer);
+struct yabi_node *yabi_create_list_node(struct yabi_type **list, size_t length);
+struct yabi_node *
+yabi_create_dictionary_node(struct yabi_dictionary_element **dictionary,
+                            size_t length);
 void yabi_destroy_node(struct yabi_node *node);
 
 /* List helpers */
