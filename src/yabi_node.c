@@ -125,7 +125,12 @@ void yabi_node_list_append(struct yabi_node_list *list, struct yabi_node *node)
                 list->head = node;
                 list->tail = node;
         } else {
-                list->tail->next = node;
+                struct yabi_node *current_node = list->head;
+                while (current_node->next != NULL) {
+                        current_node = current_node->next;
+                }
+
+                current_node->next = node;
                 list->tail = node;
         }
 
@@ -182,7 +187,11 @@ struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list)
                 return NULL;
         }
 
-        return NULL;
+        struct yabi_type *ret = list->tail->element;
+
+        yabi_node_list_remove_node(list, list->tail);
+
+        return ret;
 }
 
 void yabi_node_list_remove_node(struct yabi_node_list *list,
@@ -199,18 +208,16 @@ void yabi_node_list_remove_node(struct yabi_node_list *list,
 
                 yabi_destroy_node(tmp);
         } else {
-                struct yabi_node *tmp = list->head;
+                struct yabi_node *current_node = list->head;
+                struct yabi_node *prev = list->head;
 
-                for (size_t i = 0; i < list->length - 1; ++i) {
-                        /* Loop through the array to list->head - 1 */
-                        tmp = tmp->next;
+                while (prev->next != NULL) {
+                        prev = current_node;
+                        current_node = current_node->next;
                 }
 
-                /* tmp should now be the node preceeding list->head */
-                list->head = tmp;
-
-                yabi_destroy_node(tmp->next);
-
-                tmp->next = NULL;
+                yabi_destroy_node(current_node);
+                prev->next = NULL;
+                list->tail = prev;
         }
 }
