@@ -25,6 +25,7 @@ int main(void)
 
         printf("%s\n", last_elem->string->value);
 
+        yabi_destroy_element(last_elem);
         yabi_destroy_node_list(my_list);
 
         return EXIT_SUCCESS;
