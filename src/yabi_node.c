@@ -5,6 +5,7 @@
 #include "yabi_type.h"
 
 static void empty_node_list(struct yabi_node_list *list);
+static void destroy_node(struct yabi_node *node);
 
 struct yabi_node_list *yabi_create_node_list(void)
 {
@@ -57,6 +58,11 @@ struct yabi_node *yabi_create_node(struct yabi_type *element)
         ret->next = NULL;
 
         return ret;
+}
+
+static void destroy_node(struct yabi_node *node)
+{
+        free(node);
 }
 
 struct yabi_node *yabi_create_string_node(const char *string)
@@ -178,7 +184,7 @@ struct yabi_type *yabi_node_list_peek(struct yabi_node_list *list)
                 return NULL;
         }
 
-        return list->tail->element;
+        return list->head->element;
 }
 
 struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list)
@@ -187,9 +193,12 @@ struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list)
                 return NULL;
         }
 
-        struct yabi_type *ret = list->tail->element;
+        struct yabi_node *head = list->head;
+        struct yabi_type *ret = list->head->element;
 
-        yabi_node_list_remove_node(list, list->tail);
+        list->head = list->head->next;
+
+        destroy_node(head);
 
         return ret;
 }
@@ -220,4 +229,6 @@ void yabi_node_list_remove_node(struct yabi_node_list *list,
                 prev->next = NULL;
                 list->tail = prev;
         }
+
+        --list->length;
 }
