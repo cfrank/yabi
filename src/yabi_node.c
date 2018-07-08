@@ -212,13 +212,6 @@ void yabi_node_list_remove_node(struct yabi_node_list *list,
         }
 
         if (list->length == 1) {
-                yabi_destroy_node(node);
-                list->head = NULL;
-                list->tail = NULL;
-                return;
-        }
-
-        if (list->length == 1) {
                 /* Removing the only item in the list */
                 yabi_destroy_node(node);
                 list->head = NULL;
