@@ -219,18 +219,18 @@ void yabi_node_list_remove_node(struct yabi_node_list *list,
         }
 
         if (list->length == 1) {
-                // Removing the only item in the list
+                /* Removing the only item in the list */
                 yabi_destroy_node(node);
                 list->head = NULL;
                 list->tail = NULL;
 
         } else if (node->next != NULL) {
-                // Removing item in the middle of the list
+                /* Removing item in the middle of the list */
                 struct yabi_node *tmp = node->next;
                 node->element = tmp->element;
                 node->next = tmp->next;
         } else {
-                // Removing node from the tail
+                /* Removing node from the tail */
                 struct yabi_node *current_node = list->head;
                 struct yabi_node *prev = list->head;
 
