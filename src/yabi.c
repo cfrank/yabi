@@ -15,15 +15,19 @@ int main(void)
         yabi_node_list_append(my_list, int_node);
         yabi_node_list_append(my_list, str_node);
 
-        printf("%zu\n", yabi_node_list_get_index(my_list, 0)->integer);
+        struct yabi_type *peek_node = yabi_node_list_peek(my_list);
 
-        // yabi_node_list_remove_node(my_list, int_node);
+        printf("%d\n", peek_node->type);
 
-        struct yabi_type *last_elem = yabi_node_list_pop(my_list);
+        yabi_node_list_remove_node(my_list, int_node);
+        yabi_node_list_remove_node(my_list, str_node);
 
-        printf("%zu\n", last_elem->integer);
+        struct yabi_node *int_node_two = yabi_create_integer_node(14);
 
-        yabi_destroy_integer(last_elem);
+        yabi_node_list_append(my_list, int_node_two);
+
+        printf("%zu\n", yabi_node_list_peek(my_list)->integer);
+
         yabi_destroy_node_list(my_list);
 
         return EXIT_SUCCESS;

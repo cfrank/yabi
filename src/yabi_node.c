@@ -131,13 +131,8 @@ void yabi_node_list_append(struct yabi_node_list *list, struct yabi_node *node)
                 list->head = node;
                 list->tail = node;
         } else {
-                struct yabi_node *current_node = list->head;
-                while (current_node->next != NULL) {
-                        current_node = current_node->next;
-                }
-
-                current_node->next = node;
-                list->tail = node;
+                node->next = list->head;
+                list->head = node;
         }
 
         ++list->length;
@@ -200,6 +195,12 @@ struct yabi_type *yabi_node_list_pop(struct yabi_node_list *list)
 
         destroy_node(head);
 
+        --list->length;
+
+        if (list->length == 0) {
+                list->tail = NULL;
+        }
+
         return ret;
 }
 
@@ -210,17 +211,30 @@ void yabi_node_list_remove_node(struct yabi_node_list *list,
                 return;
         }
 
-        if (node->next != NULL) {
+        if (list->length == 1) {
+                yabi_destroy_node(node);
+                list->head = NULL;
+                list->tail = NULL;
+                return;
+        }
+
+        if (list->length == 1) {
+                // Removing the only item in the list
+                yabi_destroy_node(node);
+                list->head = NULL;
+                list->tail = NULL;
+
+        } else if (node->next != NULL) {
+                // Removing item in the middle of the list
                 struct yabi_node *tmp = node->next;
                 node->element = tmp->element;
                 node->next = tmp->next;
-
-                yabi_destroy_node(tmp);
         } else {
+                // Removing node from the tail
                 struct yabi_node *current_node = list->head;
                 struct yabi_node *prev = list->head;
 
-                while (prev->next != NULL) {
+                while (current_node->next != NULL) {
                         prev = current_node;
                         current_node = current_node->next;
                 }
