@@ -28,6 +28,11 @@ int main(void)
 
         printf("%zu\n", yabi_node_list_peek(my_list)->integer);
 
+        struct yabi_type *my_pop = yabi_node_list_pop(my_list);
+
+        printf("%zu\n", my_pop->integer);
+
+        yabi_destroy_element(my_pop);
         yabi_destroy_node_list(my_list);
 
         return EXIT_SUCCESS;
