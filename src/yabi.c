@@ -15,22 +15,30 @@ int main(int argc, char **argv)
 {
         char opt;
 
-        while ((opt = getopt(argc, argv, "f:hlv")) != -1) {
+        while ((opt = getopt(argc, argv, "f:hlrv")) != -1) {
                 switch (opt) {
                 case 'f':
-                        printf("Parsing file %s...", optarg);
+                        printf("Parsing file %s...\n", optarg);
                         break;
                 case 'h':
-                        printf("%s", "Print the help dialog");
+                        printf("%s\n", "Print the help dialog");
                         break;
                 case 'l':
-                        printf("%s", "Print the license dialog");
+                        printf("%s\n", "Print the license dialog");
+                        break;
+                case 'r':
+                        printf("%s\n", "Run the REPL shell");
                         break;
                 case 'v':
-                        printf("%s", "Print the version");
+                        printf("%s\n", "Print the version");
+                        break;
+                case '?':
+                        puts("Print the usage info");
                         break;
                 default:
-                        printf("Unknown options %c\n", opt);
+                        continue;
                 }
         }
+
+        return EXIT_SUCCESS;
 }
