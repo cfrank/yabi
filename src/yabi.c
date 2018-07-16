@@ -1,7 +1,7 @@
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "yabi.h"
 #include "yabi_node.h"
@@ -13,12 +13,12 @@
 
 int main(int argc, char **argv)
 {
-        int opt;
+        char opt;
 
         while ((opt = getopt(argc, argv, "f:hlv")) != -1) {
                 switch (opt) {
                 case 'f':
-                        printf("Parsing file %c...", optarg);
+                        printf("Parsing file %s...", optarg);
                         break;
                 case 'h':
                         printf("%s", "Print the help dialog");
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
                         printf("%s", "Print the version");
                         break;
                 default:
-                        printf("Unknown options %c", opt);
+                        printf("Unknown options %c\n", opt);
                 }
         }
 }
